@@ -1,18 +1,30 @@
 from fastapi import APIRouter, Request
 from .schema.book import CreateBook
-from ..database.models import Books
+from ..client.response import CustomResponse
 
+from ..repository import BookRepository
 router = APIRouter()
 
 
 @router.get("/book")
 async def book():
-    return {"message": "Book"}
+
+    books = await BookRepository().get_all()
+
+    context = {"books": list(books)}
+
+    return CustomResponse("all books", data=context)
+
 
 
 @router.post("/book")
 async def add_book(request: Request, create_book: CreateBook):
+    return
 
-    new_book = Books(**create_book.model_dump())
-    new_book.save()
-    return new_book.to_dict()
+
+@router.delete("/book")
+async def delete_all_books(request: Request):
+
+    await BookRepository().delete_all()
+
+    return CustomResponse("All books deleted successfully")

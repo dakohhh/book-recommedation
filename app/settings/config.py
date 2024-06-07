@@ -7,7 +7,7 @@ CERTIFICATE = os.path.join(os.path.dirname(certifi.__file__), "cacert.pem")
 
 
 class Settings(BaseSettings):
-    ENVIRONMENT: str
+    DEV:bool
 
     APP_NAME: str = "BOOK (LIBRARY) RECOMMENDATION SYSTEM"
 
@@ -35,7 +35,7 @@ import dotenv
 dotenv.load_dotenv()
 
 
-if os.getenv("ENVIRONMENT") == "development":
+if bool(os.getenv("DEV")) == True:
     settings = DevelopmentSettings()
 else:
     settings = ProductionSettings()

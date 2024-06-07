@@ -17,6 +17,7 @@ fastapi = "^0.111.0"
 mongoengine = "^0.28.2"
 pydantic-settings = "^2.3.0"
 pyjwt = "^2.8.0"
+beanie = "^1.26.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"

@@ -2,14 +2,18 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from .settings import settings
-from .routers import auth, book
+from .routers import auth, book, recommend
 import pandas as pd
 from .database.models import Books
 from .database import connect_to_mongo, disconnect_from_mongo
+import warnings
+warnings.filterwarnings("ignore")
+
+
+
 
 
 app = FastAPI(title=settings.APP_NAME, version="0.1.0")
-
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
@@ -35,8 +39,10 @@ async def shutdown_event():
     await disconnect_from_mongo()
 
 
+
 app.include_router(auth)
 app.include_router(book)
+app.include_router(recommend)
 
 
 @app.get("/")
@@ -48,7 +54,7 @@ async def root(requeest: Request):
 @app.get("/hjg")
 async def add_books():
 
-    def split_with_comma(value:list):
+    def split_with_comma(value: list):
 
         new_list = []
 
@@ -64,15 +70,13 @@ async def add_books():
 
         return new_list
 
-
     data = pd.read_csv("./book_with_genre_dataset.csv")
 
-    data = data.dropna(subset=['genres'])
+    data = data.dropna(subset=["genres"])
 
     data["genres"] = data["genres"].str.split(";")
 
     data["genres"] = data["genres"].apply(split_with_comma)
-
 
     for index, row in data.iterrows():
         title = row[1]
@@ -80,10 +84,11 @@ async def add_books():
         language_code = row[6]
         genres = row[12]
 
-        new_book = Books(title=title, author=author, genres=genres, language_code=language_code)
+        new_book = Books(
+            title=title, author=author, genres=genres, language_code=language_code
+        )
 
         new_book.save()
-
 
     return True
 
