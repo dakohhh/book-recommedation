@@ -9,7 +9,6 @@ from ..repository import BookRepository
 import pandas as pd
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
-from sklearn.preprocessing import LabelEncoder
 
 
 router = APIRouter(tags=["Recommendation"], prefix="/recommnend")
@@ -63,8 +62,6 @@ async def recommend_book(request: Request, recommend: GetBookRecommendation):
     for genre in unique_genres:
         data[genre] = data["genres"].apply(lambda x: 1 if genre in x else 0)
 
-    # label_encoder = LabelEncoder()
-
     data["language_code"] = data["language_code"].apply(encode_language_code_values)
 
     data.drop("genres", axis=1, inplace=True)
@@ -84,10 +81,10 @@ async def recommend_book(request: Request, recommend: GetBookRecommendation):
             user_input_array.append(0)
 
     user_input_array = np.array(user_input_array).reshape(1, -1)
-    
+
     print(user_input_array)
 
-    nn_model = NearestNeighbors(metric="minkowski", radius=.5, p=2)
+    nn_model = NearestNeighbors(metric="minkowski", radius=0.5, p=2)
 
     nn_model.fit(preprocessed_data)
 
@@ -117,5 +114,4 @@ async def recommend_book(request: Request, recommend: GetBookRecommendation):
 
     context = {"recommendations": list(result)}
 
-
-    return CustomResponse("Recommendations", data=context)
+    return CustomResponse("Recommendations for genres", data=context)
