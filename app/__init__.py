@@ -6,14 +6,27 @@ from .routers import auth, book, recommend
 import pandas as pd
 from .database.models import Books
 from .database import connect_to_mongo, disconnect_from_mongo
+from fastapi.middleware.cors import CORSMiddleware
 import warnings
+
 warnings.filterwarnings("ignore")
 
 
-
-
-
 app = FastAPI(title=settings.APP_NAME, version="0.1.0")
+
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"], 
+)
+
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
@@ -37,7 +50,6 @@ async def startup_event():
 async def shutdown_event():
     print("Shutting down...")
     await disconnect_from_mongo()
-
 
 
 app.include_router(auth)
@@ -91,4 +103,3 @@ async def add_books():
         new_book.save()
 
     return True
-
