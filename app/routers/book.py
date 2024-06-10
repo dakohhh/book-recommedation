@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from .schema.book import CreateBook
 from ..client.response import CustomResponse
-
+from ..utils.exceptions import BadRequestException
 from ..repository import BookRepository
 router = APIRouter()
 
@@ -19,7 +19,8 @@ async def book():
 
 @router.post("/book")
 async def add_book(request: Request, create_book: CreateBook):
-    return
+    return CustomResponse("Invalid request")
+
 
 
 @router.delete("/book")

@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 
 
-router = APIRouter(tags=["Recommendation"], prefix="/recommnend")
+router = APIRouter(tags=["Recommendation"], prefix="/recommend")
 
 
 def encode_language_code_values(value: str):

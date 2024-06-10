@@ -20,6 +20,8 @@ class BookRepository:
                     "genres": 1,
                 }
             },
+
+            { "$sort": { "created_at": -1 } }  
         ]
 
         query = Books.objects.aggregate(*pipeline)
