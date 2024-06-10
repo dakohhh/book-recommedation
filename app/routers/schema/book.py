@@ -5,5 +5,5 @@ from typing import List
 class CreateBook(BaseModel):
     title: str
     author: str
-    language_code: str
+    langauge_code: str
     genres: List[str]
