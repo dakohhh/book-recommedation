@@ -19,7 +19,11 @@ async def book():
 
 @router.post("/book")
 async def add_book(request: Request, create_book: CreateBook):
-    return CustomResponse("Invalid request")
+
+    book = await BookRepository().create(create_book)
+
+    context = {"book": book.to_dict()}
+    return CustomResponse("created book successfully", data=context)
 
 
 

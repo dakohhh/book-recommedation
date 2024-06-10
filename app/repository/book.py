@@ -35,8 +35,9 @@ class BookRepository:
         return query
 
     @staticmethod
-    async def create(self, book: CreateBook):
-        query = Books(**book.model_dump())
+    async def create(book: CreateBook):
+
+        query = Books(language_code=book.langauge_code, title=book.title, author=book.author, genres=book.genres)
 
         query.save()
 
