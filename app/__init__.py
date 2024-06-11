@@ -17,6 +17,7 @@ app = FastAPI(title=settings.APP_NAME, version="0.1.0")
 
 origins = [
     "http://localhost:3000",
+    "https://mtu-library-recommendation-system.vercel.app"
 ]
 
 app.add_middleware(
